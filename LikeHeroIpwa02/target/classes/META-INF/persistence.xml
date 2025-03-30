@@ -11,13 +11,18 @@
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
             <!-- Database connection settings -->
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:derby://localhost:1527/onlineshop" />
-            <property name="jakarta.persistence.jdbc.user" value="koch" />
-            <property name="jakarta.persistence.jdbc.password" value="osK0ch" />
-            <property name="jakarta.persistence.jdbc.driver" value="org.apache.derby.client.ClientAutoloadedDriver"/>
+            <!-- Adapted for use with XAMPP/MySQL/phpMyAdmin -->
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/onlineshop" />
+            <property name="jakarta.persistence.jdbc.user" value="root" />
+            <property name="jakarta.persistence.jdbc.password" value="" />
+            <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
 
+           <!-- added details for -->
+           <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+           <!-- <property name="hibernate.hbm2ddl.auto" value="create"/> -->
+           
             <!-- Automatically export the schema -->
-            <!-- <property name="jakarta.persistence.schema-generation.database.action" value="create" /> -->
+            <property name="jakarta.persistence.schema-generation.database.action" value="create" /> 
 
             <!-- Echo all executed SQL to console -->
             <property name="hibernate.show_sql" value="true" />
