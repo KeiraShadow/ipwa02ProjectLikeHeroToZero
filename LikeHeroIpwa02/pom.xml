@@ -5,8 +5,8 @@
         http://maven.apache.org/xsd/maven-4.0.0.xsd"
 >
   <modelVersion>4.0.0</modelVersion>
-  <groupId>de.iubh.webanwendungen</groupId>
-  <artifactId>Artikelverwaltung</artifactId>
+  <groupId>de.KeiraShadow</groupId>
+  <artifactId>LikeHeroToZero</artifactId>
   <version>0.1-SNAPSHOT</version>
   <packaging>war</packaging>
 
@@ -18,11 +18,12 @@
   </properties>
     
   <build>
+  <finalName>LikeHeroToZero</finalName>
     <plugins>
 	  <plugin>
 	    <groupId>org.apache.maven.plugins</groupId>
 	    <artifactId>maven-war-plugin</artifactId>
-	    <version>3.3.1</version>
+	    <version>3.4.0</version>
 		</plugin>
     </plugins>
   </build>

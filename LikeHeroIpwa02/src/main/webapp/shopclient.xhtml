@@ -5,7 +5,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
     <link rel="stylesheet" type="text/css" media="screen" href="style.css"/>
-    <title>Artikelverwaltung</title>
+    <title>Like Hero To Zero Webseite</title>
     <h:outputText value="#{loginController.checkLogin()}"/>
 </h:head>
 <h:body>
@@ -17,7 +17,7 @@
         <br/>
         <h:outputText value="#{anschrift.plz} #{anschrift.ort}"/>
     </p>
-    <h1>Shoppe Filzprodukte!</h1>
+    <h1>Siehe Werte ein!</h1>
     <h:form>
         <h:panelGrid columns="2" >
             <h:commandLink value="zurück" action="#{artikelController.zurueck()}"
@@ -61,6 +61,6 @@
         </h:panelGrid>
         <h:commandLink action="#{loginController.logout}" value="Logout"/>
     </h:form>
-    <p id="fussnote">Bitte beachten Sie: <br/> Diese Seite ist nur ein Entwurf!</p>
+    <p id="fussnote">Bitte beachten Sie: <br/> Diese Seite wurde im Rahmen einer Ipwa02-01 Fallstudie entwickelt.</p>
 </h:body>
 </html>
