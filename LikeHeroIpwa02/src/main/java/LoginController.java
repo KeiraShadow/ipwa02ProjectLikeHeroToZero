@@ -8,30 +8,24 @@ import jakarta.faces.validator.ValidatorException;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-
 import java.io.Serializable;
 
 @Named
 @ViewScoped
 public class LoginController implements Serializable {
-
+    
+	 private static final long serialVersionUID = 1L;
     @Inject
     Shop shop;
 
     @Inject
     CurrentUser currentUser;
 
-    // TODO: diese Wert sollte aus einer Konfiguration kommen.
-    //       Jede Installation sollte eine Unterschiedlich haben.
-    //       Dieser Salt muss geheim bleiben.
     private static final String salt = "vXsia8c04PhBtnG3isvjlemj7Bm6rAhBR8JRkf2z";
 
-    // das sind die text-felder (zB, um zu den Benutzern zu zeigen)
-    String user, password;
-    // dieses Feld ist für die Lagerung in den Validierungsstufen
-    String tempUsername;
-    // dieser Feld ist für die Anzeige zu den Benutzern das nächste Mal
-    String failureMessage = "";
+    private String user, password;
+    private String tempUsername;
+    private String failureMessage = "";
 
     public String getUser() {
         return user;
@@ -41,6 +35,7 @@ public class LoginController implements Serializable {
         this.user = user;
     }
 
+    // Add getters and setters for password
     public String getPassword() {
         return password;
     }
@@ -49,6 +44,7 @@ public class LoginController implements Serializable {
         this.password = password;
     }
 
+    // Add getter and setter for failureMessage
     public String getFailureMessage() {
         return failureMessage;
     }
@@ -57,7 +53,6 @@ public class LoginController implements Serializable {
         this.failureMessage = failureMessage;
     }
 
-    // this method should be called early to avoid providing information if the user is not logged in
     public void checkLogin() {
         if(!currentUser.isValid()) {
             failureMessage = "Bitte loggen Sie sich ein.";
@@ -65,7 +60,6 @@ public class LoginController implements Serializable {
             NavigationHandler nh = fc.getApplication().getNavigationHandler();
             nh.handleNavigation(fc, null, "login.xhtml?faces-redirect=true");
         }
-
     }
 
     public String logout() {
@@ -81,28 +75,31 @@ public class LoginController implements Serializable {
     public void validateLogin(FacesContext context, UIComponent component, Object value) throws ValidatorException {
         String password = (String) value;
         shop.validateUsernameAndPassword(currentUser, tempUsername, password, salt);
-        if (!currentUser.isValid())
-            throw new ValidatorException(new FacesMessage("Login falsch!"));
+        if (!currentUser.isValid()) {
+            throw new ValidatorException(new FacesMessage("Ungültige Anmeldedaten!"));
+        }
     }
 
     public String login() {
         if (currentUser.isAdmin()) {
             this.failureMessage = "";
             return "backoffice.xhtml?faces-redirect=true";
-        } else if (currentUser.isClient()) {
+        } else if (currentUser.isScientist()) {  // Add scientist check
             this.failureMessage = "";
-            return "shopclient.xhtml?faces-redirect=true";
+            return "shopclient.xhtml?faces-redirect=true";  // New destination for scientists
         } else {
-            this.failureMessage = "Passwort und Benutzername nicht erkannt.";
+            this.failureMessage = "Benutzername oder Passwort nicht erkannt.";
             return "";
         }
     }
 
+    // Helper method to generate hashed password for scientists
     public static void main(String[] args) {
         if(args.length!=2) {
-            System.err.println("Usage: java LoginController user pass");
+            System.err.println("Usage: java LoginController username password");
             System.exit(1);
         }
+        System.out.println("Generated hash for scientist login:");
         System.out.println(Shop.hashPassword(args[0], args[1], salt));
     }
 }

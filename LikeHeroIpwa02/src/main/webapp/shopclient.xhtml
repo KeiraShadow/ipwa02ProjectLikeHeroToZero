@@ -34,7 +34,8 @@
 
             <h:outputLabel value="Name:" for="name"/>
             <h:outputText id="name" value="#{artikelController.artikel.name}"/>
-            <h:outputText value="#{artikelController.artikel.kuerzel}"/>
+            <h:outputText value=""/>
+
 
             <h:outputLabel value="Beschreibung: " for="text"/>
             <h:outputText id="text" value="#{artikelController.artikel.text}"/>
@@ -43,10 +44,7 @@
             <!-- TODO: filter, damit es "als nicht verfügbar" angezeigt wird -->
 
 
-            <h:outputLabel value="Dimensionen (B x L x W): "/>
-            <h:outputText value="#{artikelController.artikel.dimensionen}">
-                <f:converter converterId="DimensionenConverter"/>
-            </h:outputText>
+            
 
 
             <h:graphicImage id="bild" url="#{artikelController.artikel.bild}" width="250em"/>

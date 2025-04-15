@@ -6,26 +6,29 @@ import java.util.*;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.persistence.EntityTransaction;
+
 
 @Named
 @ApplicationScoped
 public class Shop implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Inject
     ArtikelDAO artikelDAO;
 
     private final String[][] users =
             new String[][]{
-                    // password hash obtained with java LoginController koch i-am-the-boss
+                    // Admin user
                     new String[]{"koch",
                             "+INdDt2JaxoJLHzD4iAlWPYMJA0uJhusP37DvMHBKmen15EMj1Vn7BAxWS1TYFniKFKjuSyIEFbxy9jSx4d8Tw==",
                             "admin"},
-                    // password hash obtained with java LoginController you you-are-the-client
-                    new String[]{"you",
-                            "dNw2o1ZcCW+Ge/n/yfYpMLbUZ9fbxqLXEuxTa6ilzXLgmr1imFH27T6q9ZNzlqBeAdKIHDf5SopFt0ttbDybEg==",
-                            "client"}
+                    // Scientist user
+                    new String[]{"scientist1",
+                            "jCgkZGVP4sDSY4cyUiGYWpg1x9ciU06KTp4LnvdZCxQPk3jH+0lKEh9ZO9BCvvEZL6aL7ZsYUrrSYuA0XC8W+w==",
+                            "scientist"}
             };
+
     static final List<Artikel> baseSortiment = Arrays.asList(new Artikel[]{
             new Artikel("Pantoffeln \"Rudolph\"",
                     "Wunderschöne Filzpantoffeln, in beige Farbe mit einem braunen und schwarzen Kringel. Sehr angenehm für kalte Wintertage.",
@@ -39,14 +42,8 @@ public class Shop implements Serializable {
             new Film("Laurence d'Arabie", "Wahnsinnige langes und spannendes Film. Ich verspreche es Ihnen. Aber wirklich.", "laurence.png", "laurence-trailer.mp4")
     });
 
-
     public Shop() {
-
     }
-
-
-
-
 
     static String hashPassword(String name, String pass, String salt) {
         try {
@@ -62,16 +59,20 @@ public class Shop implements Serializable {
     void validateUsernameAndPassword(CurrentUser currentUser, String name, String pass, String salt) {
         String passHash = hashPassword(name, pass, salt);
         currentUser.reset();
+        
         for (String[] user : users) {
             if (user[0].equals(name)) {
                 if (user[1].equals(passHash)) {
-                    if (user[2].equals("admin")) {
-                        currentUser.admin = true;
-                        return;
-                    } else if (user[2].equals("client")) {
-                        currentUser.client = true;
-                        return;
-                    } else throw new RuntimeException("Benutzer " + name + " ist falsch angelegt.");
+                    switch (user[2]) {
+                        case "admin":
+                            currentUser.setAdmin(true);
+                            return;
+                        case "scientist":
+                            currentUser.setScientist(true);
+                            return;
+                        default:
+                            throw new RuntimeException("Benutzer " + name + " ist falsch angelegt.");
+                    }
                 }
             }
         }

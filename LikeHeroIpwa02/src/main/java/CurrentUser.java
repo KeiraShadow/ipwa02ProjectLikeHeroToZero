@@ -1,28 +1,40 @@
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Named;
-
 import java.io.Serializable;
 
 @Named
 @SessionScoped
 public class CurrentUser implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
+    
+    // Change to private fields with proper encapsulation
+    private boolean admin;
+    private boolean scientist;   
 
-    boolean admin, client;
-
-    void reset() {
-        admin = false; client = false;
+    public void reset() {
+        admin = false;
+        scientist = false;
     }
 
-    boolean isAdmin() {
+    // Add getters and setters
+    public boolean isAdmin() {
         return admin;
     }
 
-    boolean isClient() {
-        return client;
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 
-    boolean isValid() {
-        return isClient() || isAdmin();
+    public boolean isScientist() {
+        return scientist;
     }
 
+    public void setScientist(boolean scientist) {
+        this.scientist = scientist;
+    }
+
+    public boolean isValid() {
+        return isAdmin() || isScientist();
+    }
 }
