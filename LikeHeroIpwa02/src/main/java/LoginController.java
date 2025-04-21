@@ -92,6 +92,7 @@ public class LoginController implements Serializable {
             return "";
         }
     }
+    
 
     // Helper method to generate hashed password for scientists
     public static void main(String[] args) {
