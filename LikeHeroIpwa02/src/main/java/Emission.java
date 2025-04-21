@@ -7,98 +7,112 @@ import java.util.List;
 import java.util.ArrayList;
 
 @Entity
-public class Artikel implements Serializable
-{
+@Table(name = "emissions")
+public class Emission implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue
-    private int nr;
+    private int id;
+    
+    private String iso;  
+    
+    private int year;
+    
+    @Column(name = "emission_value")
+    private double emissionValue;  
+    
+    @Column(name = "last_update")
+    private Date lastUpdate;
+    
+    @ManyToOne
+    @JoinColumn(name = "iso", insertable = false, updatable = false)
+    private Country country;  
 
-    private String name;
-
-    private String text;
-
-    private String bild;
-
-    private Date verfuegbarAb;
-
-    @OneToMany(fetch= FetchType.EAGER)
-    private List<Bewertung> bewertungen = new ArrayList<>();
-
-    public Artikel()
-    {
+    // Default constructor required by JPA
+    public Emission() {
     }
 
-    public Artikel(String name, String text, String bild)
-    {
-        this(name, text, bild, new Date(0));
+    // Constructor with main fields
+    public Emission(String iso, int year, double emissionValue, Date lastUpdate) {
+        this.iso = iso;
+        this.year = year;
+        this.emissionValue = emissionValue;
+        this.lastUpdate = lastUpdate;
     }
 
-    public Artikel(String name, String text, String bild, Date verfuegbarAb)
-    {
-        this.name = name;
-        this.text = text;
-        this.bild = bild;
-        this.verfuegbarAb = verfuegbarAb;
-
+    // Getters and Setters
+    public int getId() {
+        return id;
     }
 
-    public String getName()
-    {
-        return name;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setName(String name)
-    {
-        this.name = name;
+    public String getIso() {
+        return iso;
     }
 
-    public int getNr()
-    {
-        return nr;
+    public void setIso(String iso) {
+        this.iso = iso;
     }
 
-    public void setNr(int nr)
-    {
-        this.nr = nr;
+    public int getYear() {
+        return year;
     }
 
-    public String getText()
-    {
-        return text;
+    public void setYear(int year) {
+        this.year = year;
     }
 
-    public void setText(String text)
-    {
-        this.text = text;
+    public double getEmissionValue() {
+        return emissionValue;
     }
 
-    public String getBild()
-    {
-        return bild;
+    public void setEmissionValue(double emissionValue) {
+        this.emissionValue = emissionValue;
     }
 
-    public void setBild(String bild)
-    {
-        this.bild = bild;
+    public Date getLastUpdate() {
+        return lastUpdate;
     }
 
-    public Date getVerfuegbarAb()
-    {
-        return verfuegbarAb;
+    public void setLastUpdate(Date lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 
-    public void setVerfuegbarAb(Date verfuegbarAb)
-    {
-        this.verfuegbarAb = verfuegbarAb;
+    public Country getCountry() {
+        return country;
     }
 
-    public List<Bewertung> getBewertungen() {
-        return bewertungen;
+    public void setCountry(Country country) {
+        this.country = country;
     }
 
-    public void addBewertung(Bewertung bewertung) {
-        bewertungen.add(bewertung);
+    // hashCode and equals based on id
+    @Override
+    public int hashCode() {
+        return id;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Emission emission = (Emission) obj;
+        return id == emission.id;
+    }
 
+    // toString method
+    @Override
+    public String toString() {
+        return "Emission{" +
+                "id=" + id +
+                ", iso='" + iso + '\'' +
+                ", year=" + year +
+                ", emissionValue=" + emissionValue +
+                ", lastUpdate=" + lastUpdate +
+                '}';
+    }
 }

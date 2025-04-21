@@ -1,50 +1,47 @@
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.faces.component.UIComponent;
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.convert.Converter;
+import jakarta.faces.convert.FacesConverter;
+import jakarta.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
 
-import java.io.Serializable;
-
-@Entity
-public class Bewertung implements Serializable  {
-
-    public Bewertung() {
-
+@Named
+@ApplicationScoped
+@FacesConverter(value = "countryConverter", managed = true)
+public class CountryConverter implements Converter<Country> {
+    
+    @Inject
+    private EmissionDAO emissionDAO;
+    
+    @Override
+    public Country getAsObject(FacesContext context, UIComponent component, String value) {
+        if (value == null || value.isEmpty()) {
+            return null;
+        }
+        
+        try {
+            // Debug log
+            System.out.println("Converting value: " + value);
+            System.out.println("EmissionDAO is " + (emissionDAO == null ? "null" : "not null"));
+            
+            return emissionDAO.getAllCountries()
+                    .stream()
+                    .filter(country -> country.getIso().equals(value))
+                    .findFirst()
+                    .orElse(null);
+        } catch (Exception e) {
+            System.err.println("Error in converter: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
     }
-
-    public Bewertung(String text, double wert) {
-        this.text = text;
-        this.wert = wert;
-    }
-
-    @Id
-    @GeneratedValue
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    private int id;
-
-    private double wert;
-
-    private String text;
-
-    public double getWert() {
-        return wert;
-    }
-
-    public void setWert(double wert) {
-        this.wert = wert;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
+    
+    @Override
+    public String getAsString(FacesContext context, UIComponent component, Country country) {
+        if (country == null) {
+            return "";
+        }
+        return country.getIso();
     }
 }

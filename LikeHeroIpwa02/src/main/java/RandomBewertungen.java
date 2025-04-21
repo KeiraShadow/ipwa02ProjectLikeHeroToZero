@@ -19,19 +19,19 @@ public class RandomBewertungen {
         EntityManager entityManager = Persistence.createEntityManagerFactory("onlineshop").createEntityManager();
 
         EntityTransaction transaction = entityManager.getTransaction();
-        List<Artikel> artikeln = (List<Artikel>) entityManager.createQuery("SELECT a from Artikel a").getResultList();
-        transaction.begin();
-        for(Artikel artikel: artikeln) {
-            addBewertung(entityManager, new Bewertung("Wow", Math.floor(Math.random()*10)), artikel);
-            addBewertung(entityManager,  new Bewertung("Baf", Math.floor(Math.random()*10)), artikel);
-            addBewertung(entityManager,  new Bewertung("buf", Math.floor(Math.random()*10)), artikel);
-        }
-        transaction.commit();
-    }
+       // List<Artikel> artikeln = (List<Artikel>) entityManager.createQuery("SELECT a from Artikel a").getResultList();
+      //  transaction.begin();
+       // for(Artikel artikel: artikeln) {
+        //    addBewertung(entityManager, new Bewertung("Wow", Math.floor(Math.random()*10)), artikel);
+        //    addBewertung(entityManager,  new Bewertung("Baf", Math.floor(Math.random()*10)), artikel);
+       //     addBewertung(entityManager,  new Bewertung("buf", Math.floor(Math.random()*10)), artikel);
+      //  }
+      //  transaction.commit();
+   // }
 
-    private void addBewertung(EntityManager entityManager, Bewertung bewertung, Artikel artikel) {
-        entityManager.persist(bewertung);
-        artikel.addBewertung(bewertung);
-        entityManager.merge(artikel);
+   // private void addBewertung(EntityManager entityManager, Bewertung bewertung, Artikel artikel) {
+    //    entityManager.persist(bewertung);
+      //  artikel.addBewertung(bewertung);
+        //entityManager.merge(artikel);
     }
 }

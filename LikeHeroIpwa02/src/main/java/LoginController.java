@@ -16,7 +16,7 @@ public class LoginController implements Serializable {
     
 	 private static final long serialVersionUID = 1L;
     @Inject
-    Shop shop;
+    EmissionsManager emissionsmanager;
 
     @Inject
     CurrentUser currentUser;
@@ -74,7 +74,7 @@ public class LoginController implements Serializable {
 
     public void validateLogin(FacesContext context, UIComponent component, Object value) throws ValidatorException {
         String password = (String) value;
-        shop.validateUsernameAndPassword(currentUser, tempUsername, password, salt);
+        emissionsmanager.validateUsernameAndPassword(currentUser, tempUsername, password, salt);
         if (!currentUser.isValid()) {
             throw new ValidatorException(new FacesMessage("Ungültige Anmeldedaten!"));
         }
@@ -86,7 +86,7 @@ public class LoginController implements Serializable {
             return "backoffice.xhtml?faces-redirect=true";
         } else if (currentUser.isScientist()) {  // Add scientist check
             this.failureMessage = "";
-            return "shopclient.xhtml?faces-redirect=true";  // New destination for scientists
+            return "emissionsManagement.xhtml?faces-redirect=true";  // New destination for scientists
         } else {
             this.failureMessage = "Benutzername oder Passwort nicht erkannt.";
             return "";
@@ -101,6 +101,6 @@ public class LoginController implements Serializable {
             System.exit(1);
         }
         System.out.println("Generated hash for scientist login:");
-        System.out.println(Shop.hashPassword(args[0], args[1], salt));
+        System.out.println(EmissionsManager.hashPassword(args[0], args[1], salt));
     }
 }

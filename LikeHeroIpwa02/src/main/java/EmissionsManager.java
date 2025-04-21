@@ -10,12 +10,12 @@ import jakarta.inject.Named;
 
 @Named
 @ApplicationScoped
-public class Shop implements Serializable {
+public class EmissionsManager implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Inject
-    ArtikelDAO artikelDAO;
+    EmissionDAO emissionDAO;
 
     private final String[][] users =
             new String[][]{
@@ -29,20 +29,7 @@ public class Shop implements Serializable {
                             "scientist"}
             };
 
-    static final List<Artikel> baseSortiment = Arrays.asList(new Artikel[]{
-            new Artikel("Pantoffeln \"Rudolph\"",
-                    "Wunderschöne Filzpantoffeln, in beige Farbe mit einem braunen und schwarzen Kringel. Sehr angenehm für kalte Wintertage.",
-                    "filzschuhe.jpg", (new GregorianCalendar(2012, 11, 23).getTime())),
-            new Artikel("Handtasche \"Cosmopolita\"",
-                    "Modische Filz-Handtasche mit praktischer Cocktailglas-Halterung. Irgendwie kommen wir nie aus dem Haus ohne solchen nützlichen Accessoire.",
-                    "handtasche.jpg", (new GregorianCalendar(2010, 10, 3).getTime())),
-            new Artikel("Filz-Hase \"Moe\"",
-                    "Ein putziger Hase aus Filz zur Dekoration. Er lässt sich gern am Rand seines Büros stellen, um Mut zu geben.", "hase.jpg",
-                    (new GregorianCalendar(2013, 11, 31).getTime())),
-            new Film("Laurence d'Arabie", "Wahnsinnige langes und spannendes Film. Ich verspreche es Ihnen. Aber wirklich.", "laurence.png", "laurence-trailer.mp4")
-    });
-
-    public Shop() {
+public EmissionsManager() {
     }
 
     static String hashPassword(String name, String pass, String salt) {
@@ -77,4 +64,18 @@ public class Shop implements Serializable {
             }
         }
     }
+
+/**
+ * Gets the latest emissions for a specific country
+ */
+public Emission getLatestEmissionForCountry(String countryIso) {
+    return emissionDAO.getLatestEmission(countryIso);
+}
+
+/**
+ * Gets all available countries
+ */
+public List<Country> getAllCountries() {
+    return emissionDAO.getAllCountries();
+}
 }
