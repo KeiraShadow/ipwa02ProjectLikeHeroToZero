@@ -59,8 +59,10 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <div class="d-flex align-items-center">
+            <a href="index.html" class="d-flex align-items-center text-decoration-none">
                 <img src="carbon.png" width="40" alt="Logo" class="img-fluid me-2"/>
-                <a class="navbar-brand" href="#">Like Hero to Zero</a>
+                 <span class="navbar-brand">Like Hero to Zero</span>
+            </a>
             </div>
 
             <button class="navbar-toggler" type="button" 
@@ -104,73 +106,93 @@
     </div>
 
     <!-- Main Content -->
-    <div class="container mt-5">
-       
-
-        <!-- Country Selection -->
-        <div class="row mb-4">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="card-title mb-0">Ihr Land auswählen</h5>
-                    </div>
-                    <div class="card-body">
-                        <h:form>
-                            <div class="mb-3">
-                                <h:outputLabel for="country" value="Land:" styleClass="form-label"/>
-                                <h:selectOneMenu id="country" value="#{emissionData.selectedCountry}" 
-                                               styleClass="form-select">
-                                    <f:selectItem itemLabel="Bitte wählen Sie Ihr Land" itemValue=""/>
-                                    <f:selectItems value="#{emissionData.countries}"/>
-                                    <f:ajax render="emissionPanel"/>
-                                </h:selectOneMenu>
+<div class="container mt-5">
+    <!-- Latest Global Statistics -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="transparent-container">
+                <h2 class="text-center mb-4">Aktuelle globale CO2-Statistiken</h2>
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="card-title mb-0">Globale Emissionen 2021</h5>
                             </div>
-                        </h:form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Emissions Data Panel -->
-        <h:panelGroup id="emissionPanel" layout="block" 
-                      rendered="#{not empty emissionData.selectedCountry}">
-            <div class="row">
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100">
-                        <div class="card-header bg-info text-white">
-                            <h5 class="card-title mb-0">Aktuelle CO2-Emissionen</h5>
-                        </div>
-                        <div class="card-body">
-                            <h2 class="display-6">#{emissionData.currentEmission} kt</h2>
-                            <p class="text-muted">Stand: #{emissionData.lastUpdate}</p>
+                            <div class="card-body text-center">
+                                <i class="fas fa-globe fa-3x mb-3 text-primary"></i>
+                                <h3>36.3 Gt CO2</h3>
+                                <p class="text-muted">Weltweiter CO2-Ausstoß</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100">
-                        <div class="card-header bg-success text-white">
-                            <h5 class="card-title mb-0">Entwicklung zum Vorjahr</h5>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-success text-white">
+                                <h5 class="card-title mb-0">Top-3</h5>
+                            </div>
+                            <div class="card-body text-center">
+                                <i class="fas fa-industry fa-3x mb-3 text-success"></i>
+                                <h3>China, USA, Indien</h3>
+                                <p class="text-muted">Größte CO2-Verursacher</p>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <h2 class="display-6">
-                                <h:outputText value="#{emissionData.trend}%" 
-                                            styleClass="#{emissionData.trend lt 0 ? 'text-success' : 'text-danger'}"/>
-                            </h2>
-                            <p class="text-muted">Veränderung gegenüber Vorjahr</p>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-info text-white">
+                                <h5 class="card-title mb-0"> Emissions-Trend</h5>
+                            </div>
+                            <div class="card-body text-center">
+                                <i class="fas fa-chart-line fa-3x mb-3 text-info"></i>
+                                <h3>+4.8%</h3>
+                                <p class="text-muted">Globaler Anstieg seit 2020</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </h:panelGroup>
-
-        <!-- Login Button -->
-        <div class="text-center mt-4 mb-5">
-            <a href="login.xhtml" class="btn btn-primary btn-lg">
-                Wissenschaftler-Login
-            </a>
         </div>
     </div>
+
+    <!-- Interactive Map Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="transparent-container">
+                <h2 class="text-center mb-4">Weltweite CO2-Emissionen im Überblick</h2>
+                <p class="text-center mb-4">
+                    Klicken Sie auf <a href="emissions.xhtml" class="text-primary">Aktuelle Emissionsdaten</a>, 
+                    um detaillierte Länderinformationen zu erhalten.
+                </p>
+               
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="transparent-container text-center">
+                <h2 class="mb-4">Werden Sie aktiv</h2>
+                <div class="row justify-content-center">
+                    <div class="col-md-4 mb-3">
+                        <a href="emissions.xhtml" class="btn btn-primary btn-lg w-100">
+                            <i class="fas fa-search me-2"></i>CO2-Daten einsehen
+                        </a>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <a href="login.xhtml" class="btn btn-success btn-lg w-100">
+                            <i class="fas fa-user-graduate me-2"></i>Wissenschaftler-Login
+                        </a>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        
 
     <!-- Footer -->
     <footer class="bg-dark text-white text-center mt-5">
