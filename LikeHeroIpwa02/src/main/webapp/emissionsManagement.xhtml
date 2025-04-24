@@ -9,6 +9,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Wissenschaftler Dashboard - Dateneingabe</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<!-- Add Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+
 </h:head>
 
 <h:body>
@@ -59,6 +62,38 @@
     <div class="container mt-5">
         <h2>CO2-Emissionsdaten Verwaltung</h2>
         
+        <!-- Instructions Panel -->
+<div class="card mb-4">
+    <div class="card-header" role="button" data-bs-toggle="collapse" data-bs-target="#instructionsPanel" aria-expanded="true" aria-controls="instructionsPanel" style="cursor: pointer;">
+        <h4 class="mb-0 d-flex align-items-center justify-content-between">
+            <span>
+                <i class="fas fa-info-circle me-2"></i>
+                Anleitung zur Dateneingabe für Wissenschaftler:innen
+            </span>
+            <i class="fas fa-chevron-down"></i>
+        </h4>
+    </div>
+    
+    <div id="instructionsPanel" class="collapse show">
+        <div class="card-body alert-info">
+            <p>Als registrierte:r, Daten beitragende:r Wissenschaftler:in können Sie hier die jüngsten Daten aus Ihrer Klimaforschung in den Datensatz eintragen:</p>
+            <ol>
+                <li>Wählen Sie das entsprechende Land aus der Dropdown-Liste aus</li>
+                <li>Das Jahr 2021 ist bereits vorausgewählt</li>
+                <li>Tragen Sie den gemessenen CO2-Emissionswert in MtCO2e ein</li>
+                <li>Klicken Sie auf "Speichern", um die Daten zu übermitteln</li>
+            </ol>
+            <hr/>
+            <p class="mb-0">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <strong>Wichtiger Hinweis:</strong> Ihre eingetragenen Daten werden vor der Veröffentlichung geprüft und freigegeben. Bitte stellen Sie sicher, dass die eingegebenen Werte korrekt und verifiziert sind.
+            </p>
+        </div>
+    </div>
+</div>
+
+
+        
         <h:form id="emissionForm" styleClass="mt-4">
             <!-- Land auswählen -->
             <div class="mb-3">
@@ -81,6 +116,7 @@
                 <h:outputLabel for="year" value="Jahr:" styleClass="form-label"/>
                 <h:inputText id="year" value="#{emissionController.emission.year}"
                            styleClass="form-control"/>
+                           <small class="text-muted">Das Jahr 2021 ist das aktuellste Jahr</small>
             </div>
 
             <div class="mb-3">
@@ -139,6 +175,8 @@
     <!-- JavaScript Dependencies -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+
 </h:body>
 </html>
+
 

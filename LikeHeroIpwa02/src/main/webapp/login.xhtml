@@ -111,46 +111,27 @@
                                 
                                <h:form>
     <div class="mb-3">
-        <h:outputLabel value="Benutzername:" for="user" styleClass="form-label"/>
-        <div class="input-group">
-            <span class="input-group-text">
-                <i class="fas fa-user"></i>
-            </span>
-            <p:inputText id="user" 
-                       value="#{loginController.user}" 
-                       required="true" 
-                       styleClass="form-control"
-                       placeholder="Benutzername eingeben...">
-                <f:event type="postValidate" listener="#{loginController.postValidateUser}"/>
-            </p:inputText>
-        </div>
-        <h:message for="user" styleClass="text-danger"/>
+        <h:outputLabel for="username" value="Benutzername:" styleClass="form-label"/>
+        <h:inputText id="username" value="#{loginController.username}" 
+                    styleClass="form-control"/>
     </div>
-
-    <div class="mb-3">
-        <h:outputLabel value="Passwort:" for="password" styleClass="form-label"/>
-        <div class="input-group">
-            <span class="input-group-text">
-                <i class="fas fa-lock"></i>
-            </span>
-            <p:password id="password" 
-                     value="#{loginController.password}" 
-                     required="true"
-                     validator="#{loginController.validateLogin}" 
-                     styleClass="form-control"
-                     placeholder="Passwort eingeben..."/>
-        </div>
-        <h:message for="password" styleClass="text-danger"/>
-    </div>
-    <div class="mb-3">
-                                        <h:outputText value="#{loginController.failureMessage}" 
-                                                     styleClass="text-danger d-block mb-2"/>
-                                        <h:commandButton action="#{loginController.login}" 
-                                                       value="Login" 
-                                                       styleClass="btn btn-primary w-100"/>
-                                    </div>
     
+    <div class="mb-3">
+        <h:outputLabel for="password" value="Passwort:" styleClass="form-label"/>
+        <h:inputSecret id="password" value="#{loginController.password}" 
+                      styleClass="form-control"/>
+    </div>
+    
+    <!-- Change this line -->
+    <h:commandButton value="Anmelden" action="#{loginController.login}" 
+                     styleClass="btn btn-primary"/>
+                     
+    <h:outputText value="#{loginController.failureMessage}" 
+                  rendered="#{not empty loginController.failureMessage}"
+                  styleClass="text-danger d-block mb-2"/>
 </h:form>
+
+
 
                                 
                                 <div class="mt-3 text-center">

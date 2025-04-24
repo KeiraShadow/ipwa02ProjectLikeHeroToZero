@@ -1,106 +1,117 @@
-import jakarta.faces.application.FacesMessage;
-import jakarta.faces.application.NavigationHandler;
-import jakarta.faces.component.UIComponent;
-import jakarta.faces.component.UIInput;
-import jakarta.faces.context.FacesContext;
-import jakarta.faces.event.ComponentSystemEvent;
-import jakarta.faces.validator.ValidatorException;
-import jakarta.faces.view.ViewScoped;
+import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
+import java.nio.charset.StandardCharsets; 
 
+  
 @Named
-@ViewScoped
+@SessionScoped
 public class LoginController implements Serializable {
     
-	 private static final long serialVersionUID = 1L;
     @Inject
-    EmissionsManager emissionsmanager;
-
-    @Inject
-    CurrentUser currentUser;
-
-    private static final String salt = "vXsia8c04PhBtnG3isvjlemj7Bm6rAhBR8JRkf2z";
-
-    private String user, password;
-    private String tempUsername;
-    private String failureMessage = "";
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    // Add getters and setters for password
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    // Add getter and setter for failureMessage
+    private UserDAO userDAO;
+    
+    private String username;
+    private String password;
+    private User currentUser;
+    private String failureMessage; // Add this property
+    
+    // Add these getter and setter methods
     public String getFailureMessage() {
         return failureMessage;
     }
-
+    
     public void setFailureMessage(String failureMessage) {
         this.failureMessage = failureMessage;
     }
-
-    public void checkLogin() {
-        if(!currentUser.isValid()) {
-            failureMessage = "Bitte loggen Sie sich ein.";
-            FacesContext fc = FacesContext.getCurrentInstance();
-            NavigationHandler nh = fc.getApplication().getNavigationHandler();
-            nh.handleNavigation(fc, null, "login.xhtml?faces-redirect=true");
-        }
-    }
-
-    public String logout() {
-        currentUser.reset();
-        return "login.xhtml?faces-redirect=true";
-    }
-
-    public void postValidateUser(ComponentSystemEvent ev) {
-        UIInput temp = (UIInput) ev.getComponent();
-        this.tempUsername = (String) temp.getValue();
-    }
-
-    public void validateLogin(FacesContext context, UIComponent component, Object value) throws ValidatorException {
-        String password = (String) value;
-        emissionsmanager.validateUsernameAndPassword(currentUser, tempUsername, password, salt);
-        if (!currentUser.isValid()) {
-            throw new ValidatorException(new FacesMessage("Ungültige Anmeldedaten!"));
-        }
-    }
-
+    
     public String login() {
-        if (currentUser.isAdmin()) {
-            this.failureMessage = "";
-            return "backoffice.xhtml?faces-redirect=true";
-        } else if (currentUser.isScientist()) {  // Add scientist check
-            this.failureMessage = "";
-            return "emissionsManagement.xhtml?faces-redirect=true";  // New destination for scientists
-        } else {
-            this.failureMessage = "Benutzername oder Passwort nicht erkannt.";
-            return "";
+        try {
+            System.out.println("Login attempt for user: " + username);
+            User user = userDAO.findByUsername(username);
+            
+            if (user != null) {
+                System.out.println("User found with role: " + user.getRole());
+                System.out.println("Stored password hash: " + user.getPassword());
+                
+                // Create a test hash to verify our hashing process
+                MessageDigest md = MessageDigest.getInstance("SHA-256");
+                byte[] testBytes = md.digest("password".getBytes(StandardCharsets.UTF_8));
+                String testHash = Base64.getEncoder().encodeToString(testBytes);
+                System.out.println("Test hash of 'password': " + testHash);
+                
+                // Hash the actual input password
+                md.reset();
+                byte[] hashedBytes = md.digest(password.getBytes(StandardCharsets.UTF_8));
+                String hashedPassword = Base64.getEncoder().encodeToString(hashedBytes);
+                
+                System.out.println("Input password hash: " + hashedPassword);
+                System.out.println("Password match: " + hashedPassword.equals(user.getPassword()));
+                
+                if (hashedPassword.equals(user.getPassword())) {
+                    currentUser = user;
+                    failureMessage = null;
+                    
+                    if ("ADMIN".equals(user.getRole())) {
+                        return "emissionsManagement.xhtml?faces-redirect=true";
+                    } else {
+                        return "emissionsManagement.xhtml?faces-redirect=true";
+                    }
+                }
+            }
+            
+            failureMessage = "Ungültige Anmeldedaten";
+            return null;
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            failureMessage = "Login-Fehler: " + e.getMessage();
+            return null;
         }
     }
+
     
 
-    // Helper method to generate hashed password for scientists
-    public static void main(String[] args) {
-        if(args.length!=2) {
-            System.err.println("Usage: java LoginController username password");
-            System.exit(1);
+
+        public String logout() {
+            currentUser = null;
+            FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+            return "login.xhtml?faces-redirect=true";
         }
-        System.out.println("Generated hash for scientist login:");
-        System.out.println(EmissionsManager.hashPassword(args[0], args[1], salt));
+
+    
+    // Getters and Setters
+    public String getUsername() {
+        return username;
+    }
+    
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
+    public String getPassword() {
+        return password;
+    }
+    
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    
+    public boolean isLoggedIn() {
+        return currentUser != null;
+    }
+    
+    public boolean isAdmin() {
+        return currentUser != null && "ADMIN".equals(currentUser.getRole());
+    }
+    
+    public boolean isScientist() {
+        return currentUser != null && "SCIENTIST".equals(currentUser.getRole());
     }
 }
