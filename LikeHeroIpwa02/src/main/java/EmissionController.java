@@ -17,6 +17,16 @@ public class EmissionController implements Serializable {
     @Inject
     private EmissionDAO emissionDAO;
     
+    @Inject
+    private PendingEmissionDAO pendingEmissionDAO;
+    
+    @Inject
+    private LoginController loginController;
+    
+    @Inject
+    private PendingEmission lastSubmittedEmission;
+    
+    
     private List<Emission> allEmissions2021;
     private Country selectedCountry;
     private List<Country> allCountries;
@@ -25,6 +35,7 @@ public class EmissionController implements Serializable {
     private int pageSize = 10; // Default page size
     private int currentPage = 0;
     private List<Emission> allEmissions2020;
+    private Emission lastSavedEmission;
     
     @PostConstruct
     public void init() {
@@ -33,6 +44,7 @@ public class EmissionController implements Serializable {
             allEmissions2021 = new ArrayList<>();
             allEmissions2020 = new ArrayList<>();
             allCountries = new ArrayList<>();
+            lastSubmittedEmission = null;
             
             // Load initial data
             loadEmissions2021();
@@ -45,6 +57,12 @@ public class EmissionController implements Serializable {
             System.err.println("Error in init(): " + e.getMessage());
             e.printStackTrace();
         }
+    }
+    
+    
+
+    public void setLastSavedEmission(Emission lastSavedEmission) {
+        this.lastSavedEmission = lastSavedEmission;
     }
     
     private void loadEmissions2021() {
@@ -89,46 +107,71 @@ public class EmissionController implements Serializable {
         }
     }
     
+
     public String saveEmission() {
         try {
+            System.out.println("Save emission method called");
             if (selectedCountry != null) {
-                emission.setIso(selectedCountry.getIso());
-                emission.setLastUpdate(new Date()); 
+                System.out.println("Selected country: " + selectedCountry.getIso());
                 
-                // Check if entry already exists
-                Emission existingEmission = emissionDAO.getEmissionByYear(
-                    selectedCountry.getIso(), 
-                    emission.getYear()
-                );
+                // Create pending emission
+                PendingEmission pendingEmission = new PendingEmission();
+                pendingEmission.setIso(selectedCountry.getIso());
+                pendingEmission.setYear(emission.getYear());
+                pendingEmission.setEmissionValue(emission.getEmissionValue());
+                pendingEmission.setCountry(selectedCountry);
+                pendingEmission.setSubmissionDate(new Date());
                 
-                if (existingEmission != null) {
-                    // Update existing entry 
-                    existingEmission.setEmissionValue(emission.getEmissionValue());
-                    emissionDAO.merge(existingEmission);
-                } else {
-                    // Create new entry 
-                    emissionDAO.persist(emission);
+                // Check if loginController is properly injected
+                if (loginController == null) {
+                    throw new IllegalStateException("LoginController not injected");
                 }
+                pendingEmission.setScientistUsername(loginController.getUsername());
+                pendingEmission.setStatus(PendingEmission.ApprovalStatus.PENDING);
                 
-                // Reset Form
+                System.out.println("About to persist pending emission");
+                
+                // Save to pending table
+                pendingEmissionDAO.persist(pendingEmission);
+                this.lastSubmittedEmission = pendingEmission; // Use this. to be explicit
+                
+                System.out.println("Emission saved successfully");
+                
+                // Reset form
                 emission = new Emission();
-                loadEmissions2021();
                 
-                FacesContext.getCurrentInstance().addMessage(null, 
-                    new FacesMessage(FacesMessage.SEVERITY_INFO, 
-                    "Daten erfolgreich gespeichert", null));
+                FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "Daten zur Überprüfung eingereicht", null));
+                    
+                return null;
+            } else {
+                System.out.println("Selected country is null");
+                FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Bitte wählen Sie ein Land aus", null));
             }
         } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, 
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, 
+            System.err.println("Error saving emission: " + e.getMessage());
+            e.printStackTrace();
+            FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_ERROR,
                 "Fehler beim Speichern: " + e.getMessage(), null));
         }
         return null;
     }
+
+
+
     
     // Getters and Setters
     public List<Emission> getAllEmissions2021() {
         return allEmissions2021;
+    }
+    
+ // Add getter for lastSavedEmission
+    public Emission getLastSavedEmission() {
+        return lastSavedEmission;
     }
     
     public Country getSelectedCountry() {
@@ -232,6 +275,9 @@ public class EmissionController implements Serializable {
     public void setPageSize(int pageSize) {
         this.pageSize = pageSize;
         this.currentPage = 0; // Reset to first page when changing page size
+    }
+    public PendingEmission getLastSubmittedEmission() {
+        return lastSubmittedEmission;
     }
 
 }

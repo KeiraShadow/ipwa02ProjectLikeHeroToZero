@@ -41,10 +41,10 @@
                         <a href="index.html" class="nav-link">Hauptseite</a>
                     </li>
                     <li class="nav-item">
-                        <a href="login.xhtml" class="nav-link">Login</a>
+                        <a href="emissions.xhtml" class="nav-link">Aktuelle Emissionsdaten</a>
                     </li>
                     <li class="nav-item">
-                        <a href="emissions.xhtml" class="nav-link">Aktuelle Emissionsdaten</a>
+                        <a href="login.xhtml" class="nav-link">Login</a>
                     </li>
                     <li class="nav-item">
                         <h:form style="margin: 0;">
@@ -77,11 +77,13 @@
     <div id="instructionsPanel" class="collapse show">
         <div class="card-body alert-info">
             <p>Als registrierte:r, Daten beitragende:r Wissenschaftler:in können Sie hier die jüngsten Daten aus Ihrer Klimaforschung in den Datensatz eintragen:</p>
+             <p>Es sollte immer nur ein Datensatz gleichzeitig gespeichert werden.</p>
             <ol>
                 <li>Wählen Sie das entsprechende Land aus der Dropdown-Liste aus</li>
                 <li>Das Jahr 2021 ist bereits vorausgewählt</li>
                 <li>Tragen Sie den gemessenen CO2-Emissionswert in MtCO2e ein</li>
                 <li>Klicken Sie auf "Speichern", um die Daten zu übermitteln</li>
+               
             </ol>
             <hr/>
             <p class="mb-0">
@@ -94,63 +96,62 @@
 
 
         
-        <h:form id="emissionForm" styleClass="mt-4">
-            <!-- Land auswählen -->
-            <div class="mb-3">
-                <h:outputLabel for="country" value="Land:" styleClass="form-label"/>
-                <h:selectOneMenu id="country" 
-                               value="#{emissionController.selectedCountry}"
-                               styleClass="form-select"
-                               converter="#{countryConverter}">
-                    <f:selectItem itemLabel="Bitte wählen Sie ein Land" itemValue="#{null}"/>
-                    <f:selectItems value="#{emissionController.allCountries}"
-                                 var="country"
-                                 itemLabel="#{country.countryName}"
-                                 itemValue="#{country}"/>
-                    <f:ajax execute="@this" render="emissionData"/>
-                </h:selectOneMenu>
-            </div>
+       <h:form id="emissionForm">
+    <!-- Add messages component at the top of the form -->
+    <h:messages styleClass="alert alert-danger" errorClass="alert alert-danger" infoClass="alert alert-success"/>
+    
+    <div class="mb-3">
+        <h:outputLabel for="country" value="Land:" styleClass="form-label"/>
+        <h:selectOneMenu id="country" 
+                        value="#{emissionController.selectedCountry}"
+                        styleClass="form-select"
+                        converter="#{countryConverter}">
+            <f:selectItem itemLabel="Bitte wählen Sie ein Land" itemValue="#{null}"/>
+            <f:selectItems value="#{emissionController.allCountries}"
+                         var="country"
+                         itemLabel="#{country.countryName}"
+                         itemValue="#{country}"/>
+            <f:ajax event="change" render="emissionForm"/>
+        </h:selectOneMenu>
+    </div>
 
-            <!-- Emissionsdaten eingeben -->
-            <div class="mb-3">
-                <h:outputLabel for="year" value="Jahr:" styleClass="form-label"/>
-                <h:inputText id="year" value="#{emissionController.emission.year}"
-                           styleClass="form-control"/>
-                           <small class="text-muted">Das Jahr 2021 ist das aktuellste Jahr</small>
-            </div>
+    <div class="mb-3">
+        <h:outputLabel for="year" value="Jahr:" styleClass="form-label"/>
+        <h:inputText id="year" 
+                    value="#{emissionController.emission.year}"
+                    styleClass="form-control"
+                    required="true"
+                    requiredMessage="Bitte geben Sie ein Jahr ein"/>
+    </div>
 
-            <div class="mb-3">
-                <h:outputLabel for="emissionValue" value="CO2-Emissionen (MtCO2e):" styleClass="form-label"/>
-                <h:inputText id="emissionValue" 
-                           value="#{emissionController.emission.emissionValue}"
-                           styleClass="form-control"/>
-            </div>
+    <div class="mb-3">
+        <h:outputLabel for="emissionValue" value="CO2-Emissionen (MtCO2e):" styleClass="form-label"/>
+        <h:inputText id="emissionValue" 
+                    value="#{emissionController.emission.emissionValue}"
+                    styleClass="form-control"
+                    required="true"
+                    requiredMessage="Bitte geben Sie einen Emissionswert ein"/>
+    </div>
 
-            <h:commandButton value="Speichern" 
-                           action="#{emissionController.saveEmission}"
-                           styleClass="btn btn-primary"/>
-        </h:form>
+    <h:commandButton value="Speichern" 
+                     action="#{emissionController.saveEmission}"
+                     styleClass="btn btn-primary">
+        <f:ajax execute="@form" render="@form savedDataPanel"/>
+    </h:commandButton>
+</h:form>
 
-        <!-- Vorhandene Daten anzeigen -->
-        <h:panelGroup id="emissionData" styleClass="mt-5">
-            <h3>Vorhandene Emissionsdaten</h3>
-            <h:dataTable value="#{emissionController.allEmissions2021}"
-                       var="emission"
-                       styleClass="table table-striped">
-                <h:column>
-                    <f:facet name="header">Land</f:facet>
-                    #{emission.country.countryName}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Jahr</f:facet>
-                    #{emission.year}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">CO2-Emissionen</f:facet>
-                    #{emission.emissionValue}
-                </h:column>
-            </h:dataTable>
-        </h:panelGroup>
+<!-- Panel to show saved data -->
+<h:panelGroup id="submissionResult" rendered="#{not empty emissionController.lastSubmittedEmission}">
+    <div class="alert alert-info">
+        <h4>Zuletzt übermittelte Daten:</h4>
+        <p>Land: #{emissionController.lastSubmittedEmission.country.countryName}</p>
+        <p>Jahr: #{emissionController.lastSubmittedEmission.year}</p>
+        <p>Emissionswert: #{emissionController.lastSubmittedEmission.emissionValue}</p>
+        <p><em>Diese Daten werden vom Administrator überprüft.</em></p>
+    </div>
+</h:panelGroup>
+
+
     </div>
 
     <!-- Footer -->

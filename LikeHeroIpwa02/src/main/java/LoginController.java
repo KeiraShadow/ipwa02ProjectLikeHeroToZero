@@ -59,8 +59,10 @@ public class LoginController implements Serializable {
                     failureMessage = null;
                     
                     if ("ADMIN".equals(user.getRole())) {
-                        return "emissionsManagement.xhtml?faces-redirect=true";
+                    	System.out.println("Redirecting to adminApproval.xhtml"); // Add this line
+                        return "adminApproval.xhtml?faces-redirect=true";
                     } else {
+                    	System.out.println("Redirecting to emissionsManagement.xhtml"); 
                         return "emissionsManagement.xhtml?faces-redirect=true";
                     }
                 }
