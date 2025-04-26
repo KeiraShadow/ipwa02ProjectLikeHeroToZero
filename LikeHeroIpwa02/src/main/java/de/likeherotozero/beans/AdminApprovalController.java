@@ -1,18 +1,28 @@
+package de.likeherotozero.beans;
+
 import java.io.Serializable;
 import java.util.List;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.annotation.PostConstruct;
-import java.util.ArrayList;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.application.FacesMessage;
 import java.util.Date; 
 
+//For your entity classes
+import de.likeherotozero.entities.Emission;
+import de.likeherotozero.entities.PendingEmission;
+
+//For your DAOs
+import de.likeherotozero.dao.EmissionDAO;
+import de.likeherotozero.dao.PendingEmissionDAO;
+
 @Named
 @ViewScoped
 public class AdminApprovalController implements Serializable {
-    
+	private static final long serialVersionUID = 1L;
+	
     @Inject
     private PendingEmissionDAO pendingEmissionDAO;
     

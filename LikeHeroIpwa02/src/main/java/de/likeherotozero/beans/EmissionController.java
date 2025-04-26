@@ -1,3 +1,14 @@
+package de.likeherotozero.beans;
+
+//For your entity classes
+import de.likeherotozero.entities.Emission;
+import de.likeherotozero.entities.PendingEmission;
+import de.likeherotozero.entities.Country;
+
+//For your DAOs
+import de.likeherotozero.dao.EmissionDAO;
+import de.likeherotozero.dao.PendingEmissionDAO;
+
 import java.io.Serializable;
 import java.util.List;
 import jakarta.faces.view.ViewScoped;
@@ -169,7 +180,6 @@ public class EmissionController implements Serializable {
         return allEmissions2021;
     }
     
- // Add getter for lastSavedEmission
     public Emission getLastSavedEmission() {
         return lastSavedEmission;
     }
@@ -267,7 +277,7 @@ public class EmissionController implements Serializable {
         return allCountries.size();
     }
     
-    // Getters and setters
+   
     public int getPageSize() {
         return pageSize;
     }

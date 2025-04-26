@@ -1,3 +1,5 @@
+package de.likeherotozero.entities;
+
 import jakarta.persistence.*;
 
 import java.io.Serializable;

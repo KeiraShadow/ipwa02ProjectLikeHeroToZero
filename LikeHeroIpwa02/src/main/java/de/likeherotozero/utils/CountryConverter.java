@@ -1,3 +1,10 @@
+package de.likeherotozero.utils;
+
+//Your entity classes
+import de.likeherotozero.entities.Country;
+
+import de.likeherotozero.dao.EmissionDAO;
+
 import jakarta.faces.component.UIComponent;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.convert.Converter;

@@ -1,3 +1,9 @@
+package de.likeherotozero.dao;
+
+//For your entity classes
+import de.likeherotozero.entities.Emission;
+import de.likeherotozero.entities.Country;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Named;
 import jakarta.persistence.*;

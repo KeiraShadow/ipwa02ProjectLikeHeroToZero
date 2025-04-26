@@ -1,11 +1,22 @@
+package de.likeherotozero.beans;
+
+//For your entity classes
+import de.likeherotozero.entities.Emission;
+import de.likeherotozero.entities.PendingEmission;
+import de.likeherotozero.entities.Country;
+import de.likeherotozero.entities.User;
+
+//For your DAOs
+import de.likeherotozero.dao.EmissionDAO;
+import de.likeherotozero.dao.PendingEmissionDAO;
+import de.likeherotozero.dao.UserDAO;
+
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import java.io.Serializable;
-import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.nio.charset.StandardCharsets; 
 
@@ -13,7 +24,8 @@ import java.nio.charset.StandardCharsets;
 @Named
 @SessionScoped
 public class LoginController implements Serializable {
-    
+	private static final long serialVersionUID = 1L;
+	
     @Inject
     private UserDAO userDAO;
     
