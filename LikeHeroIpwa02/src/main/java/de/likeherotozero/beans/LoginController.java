@@ -1,12 +1,12 @@
 package de.likeherotozero.beans;
 
-//For your entity classes
+//For entity classes
 import de.likeherotozero.entities.Emission;
 import de.likeherotozero.entities.PendingEmission;
 import de.likeherotozero.entities.Country;
 import de.likeherotozero.entities.User;
 
-//For your DAOs
+//For DAOs
 import de.likeherotozero.dao.EmissionDAO;
 import de.likeherotozero.dao.PendingEmissionDAO;
 import de.likeherotozero.dao.UserDAO;
@@ -19,7 +19,6 @@ import jakarta.faces.context.FacesContext;
 import java.security.MessageDigest;
 import java.util.Base64;
 import java.nio.charset.StandardCharsets; 
-
   
 @Named
 @SessionScoped
@@ -90,16 +89,12 @@ public class LoginController implements Serializable {
         }
     }
 
-    
-
-
         public String logout() {
             currentUser = null;
             FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
             return "login.xhtml?faces-redirect=true";
         }
-
-    
+ 
     // Getters and Setters
     public String getUsername() {
         return username;
