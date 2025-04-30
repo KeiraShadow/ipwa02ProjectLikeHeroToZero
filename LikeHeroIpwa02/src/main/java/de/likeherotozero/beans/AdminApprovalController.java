@@ -10,11 +10,11 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.application.FacesMessage;
 import java.util.Date; 
 
-//For your entity classes
+//For entity classes
 import de.likeherotozero.entities.Emission;
 import de.likeherotozero.entities.PendingEmission;
 
-//For your DAOs
+//For DAOs
 import de.likeherotozero.dao.EmissionDAO;
 import de.likeherotozero.dao.PendingEmissionDAO;
 
