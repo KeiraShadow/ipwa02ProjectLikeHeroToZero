@@ -1,6 +1,6 @@
 package de.likeherotozero.dao;
 
-//Your entity classes
+//entity classes
 import de.likeherotozero.entities.User;
 
 import jakarta.enterprise.context.ApplicationScoped;
