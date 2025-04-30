@@ -43,7 +43,7 @@ Klicken Sie auf "OK" um den Import zu starten
 
 6. Projekt deployen und starten
 Rechtsklick auf das Projekt in Eclipse
-Wählen Sie Run As > Run on Server
+Wählen Sie auf der Datei index.html Run As > Run on Server
 Wählen Sie den Apache Tomcat v10.0 Server
 Klicken Sie auf Finish
 
