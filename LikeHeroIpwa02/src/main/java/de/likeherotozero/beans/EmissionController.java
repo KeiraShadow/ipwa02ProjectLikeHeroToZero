@@ -1,11 +1,11 @@
 package de.likeherotozero.beans;
 
-//For your entity classes
+//For entity classes
 import de.likeherotozero.entities.Emission;
 import de.likeherotozero.entities.PendingEmission;
 import de.likeherotozero.entities.Country;
 
-//For your DAOs
+//For DAOs
 import de.likeherotozero.dao.EmissionDAO;
 import de.likeherotozero.dao.PendingEmissionDAO;
 
