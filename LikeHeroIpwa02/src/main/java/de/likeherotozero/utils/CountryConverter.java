@@ -1,6 +1,6 @@
 package de.likeherotozero.utils;
 
-//Your entity classes
+//entity classes
 import de.likeherotozero.entities.Country;
 
 import de.likeherotozero.dao.EmissionDAO;
