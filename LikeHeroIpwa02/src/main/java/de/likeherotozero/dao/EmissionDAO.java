@@ -1,6 +1,6 @@
 package de.likeherotozero.dao;
 
-//For your entity classes
+//For entity classes
 import de.likeherotozero.entities.Emission;
 import de.likeherotozero.entities.Country;
 
@@ -13,7 +13,6 @@ import jakarta.persistence.criteria.Root;
 import java.util.List;
 import java.util.Date;
 import java.util.ArrayList;
-
 
 @Named
 @ApplicationScoped
