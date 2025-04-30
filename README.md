@@ -6,3 +6,6 @@ Im Projekt gibt es ein SQL Dump mit dem die Datenbank für das Projekt nachgebau
 Das Projekt sollte über die index.html auf dem Server gestartet werden.
 http://localhost:8080/LikeHeroToZero/index.html
 
+Wissenschaftler Login: scientist1 , password
+Admin Login: 1admin, password
+
